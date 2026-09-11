@@ -18,12 +18,13 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-se
 h1{font-size:clamp(32px,5vw,62px);line-height:.98;margin:12px 0 14px;letter-spacing:-.04em}
 .subtitle{max-width:680px;color:#c7cbd1;font-size:16px;line-height:1.6;margin:0}
 .main{max-width:1200px;margin:auto;padding:28px 6vw 60px}
-.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;align-items:center}
 button,.search{font:inherit}
 button{border:1px solid var(--line);background:white;border-radius:999px;padding:10px 16px;cursor:pointer;color:#3c434d}
 button.active{background:#111216;color:white;border-color:#111216}
 .search{flex:1;min-width:220px;border:1px solid var(--line);background:white;border-radius:999px;padding:12px 18px;outline:none}
 .search:focus{border-color:#9ca3af;box-shadow:0 0 0 3px #e5e7eb}
+.status{font-size:12px;color:var(--muted);margin-left:auto;white-space:nowrap}
 .stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px}
 .stat{background:white;border:1px solid var(--line);border-radius:14px;padding:13px 17px}
 .stat b{font-size:20px;margin-right:5px}.stat span{color:var(--muted);font-size:13px}
@@ -41,7 +42,7 @@ button.active{background:#111216;color:white;border-color:#111216}
 .empty{text-align:center;color:var(--muted);padding:60px 10px;grid-column:1/-1}
 .loading{text-align:center;color:var(--muted);padding:60px 10px;grid-column:1/-1}
 .error{text-align:center;color:#b42318;padding:60px 10px;grid-column:1/-1}
-@media(max-width:600px){.header{padding:40px 5vw}.main{padding:22px 5vw 45px}.card{min-height:0}}
+@media(max-width:600px){.header{padding:40px 5vw}.main{padding:22px 5vw 45px}.card{min-height:0}.status{margin-left:0;width:100%}}
 </style>
 </head>
 <body>
@@ -59,6 +60,7 @@ button.active{background:#111216;color:white;border-color:#111216}
     <button class="filter" data-filter="Council">Main Council</button>
     <button class="filter" data-filter="House Council">House Council</button>
     <input id="search" class="search" placeholder="Search by name or position…">
+    <span id="status" class="status">Loading…</span>
   </div>
 
   <div class="stats">
@@ -72,49 +74,19 @@ button.active{background:#111216;color:white;border-color:#111216}
 <div class="footer">Council Badge Introduction • Sanmati H.S. School</div>
 
 <script>
-// CSV data embedded directly so this file works standalone (no server/fetch needed).
-const CSV_TEXT = `council,name,position,qualities,strongest,contribution
-House Council,Ansh Sharma,Sports captain blue house,"Responsible, confident and organised",Confidence,Leadership also for seniors if I get the amounted respect.
-Council,Pari Jaiswal,Social outreach secretary,1. People reader 2. Approachability 3. Initiator,I'm people oriented because I naturally connect with people...understand different perspectives and make others feel comfortable and included.,I contribute the ability to connect people and turn their ideas into meaningful participation.
-House Council,Siddhika Bhushan Mulye,Green House Vice- Captain,"Consistent, responsible, and observant","Consistency is my strongest quality because I believe real leadership is built through steady effort. I try to stay committed to my responsibilities, keep improving, and give my best even when the task is small or goes unnoticed.","I aim to build an environment where every voice is heard without bias and every student gets the opportunity to be recognised for their strengths. I will actively encourage students to discover and bring forward their talents, while carrying every responsibility entrusted to me by the Student Council, teachers, or management with consistency, sincerity, and accountability."
-House Council,Bhumika Devda,Senior Red House Captain,Confident determined and supportive,"Leadership - I’m confident in taking responsibility, speaking up for myself and others, and motivating people to work together",I will bring Teamwork confidence and courage to take initiative
-House Council,Unnati Chimnani,Red house vice captain,"Confident, Approachable &Adaptable","My willingness to learn. I'm always open to learning something new, trying different things and gaining from ever experience. I believe there is always something remarkable inthe other person that needs to be learned by me!","Enthusiasm & participation. I bring energy and encourage others to involved,speak and make most of the opportunity they get"
-House Council,Rabjot Kaur Bhatia,Green House Captain,"Responsible, Inclusive and Motivating","My strongest quality is empathy, as I genuinely try to understand people and their feelings. This helps me listen to them, make them feel valued and included, and understand them better.","I can contribute my speaking skills to the school council, especially when it comes to expressing ideas and representing the council in school activities."
-House Council,Tanvi Birchha — Blue House Vice Captain,Blue House Vice Captain,"Empathetic listener,Fair minded & continuous learner","I believe one of my strongest qualities is being a continuous learner. I am always open to learning from my mistakes and respecting others’ opinions, because every experience gives me a chance to improve and grow. I believe a true leader should never stop learning, as personal growth also helps the whole team grow. For me, leadership is about learning together, improving together, and always trying to become better.",I would like to contribute better communication and participation to the council by bringing students’ ideas forward and encouraging them to take part in activities. I want to use my confidence and listening skills to help the council understand students better and turn good ideas into action.
-Council,Khwaish Arija,Deputy student editor,"Creativity, responsible , teamwork","Teamwork  Because a Student Editor isn’t just someone who writes or has ideas—they have to bring people together, communicate well, take initiative, and turn ideas into action.",I would bring fresh ideas and creativity while making sure every student’s voice is heard.
-House Council,Divyanshi Upadhyay,Senior House Captain (Blue house),"Creative, Intuitive, Confident Public Speaker","My strongest quality is being a confident public speaker because it gives my ideas a real voice. It helps me express my thoughts clearly, connect with any audience instantly, and stay calm under pressure.","My main contribution is taking fresh, creative ideas and using my intuition to shape them into something real."
-Council,Suhani Chourey,Student Editor,"Perceptive, Articulate, and Resourceful",I believe my strongest quality is being 'perceptive' because I pay attention to the little things and try to understand situations from different perspectives. It helps me notice what people need and turn those observations into meaningful ideas.,"I contribute particularly well by bringing people and ideas together. I like taking an idea, understanding what it needs, and turning it into something that people can connect with. I also believe in taking initiative and making sure that the work we do as a council is not just completed, but genuinely leaves an impact."
-Council,Anshika Bhawel,Vice Head Girl,"Responsible, Determined, and Confident.","I think being responsible is my strongest quality. Whenever I am given a responsibility, I try my best to complete it properly and make sure I can be depended on. I also take my role seriously and like to make sure things are done on time.","I think I contribute well when it comes to communicating with people and understanding different perspectives. I am comfortable talking to both students and teachers, and I try to make sure that everyone’s point of view is heard."
-House Council,Mishika maheshwari,Red house Sports captain,"Hard working ,responsible, holistic agility","My greatest strength is my holistic agility. I have this natural ability to switch between intense mental focus, physical energy, and creative teamwork without losing momentum. Whether a challenge is academic, competitive, or organizational, I actually enjoy the pressure. It helps me balance completely different responsibilities and turn them into real achievements.","The biggest thing I bring to the council is my ability to balance everything and connect with everyone. Since I do well in studies, sports, and functions, I can easily understand and talk to all kinds of students. I am always ready to do the hard work behind the scenes and keep the team's energy high when things get stressful. Basically, I am someone the council can always depend on to get the work done smoothly."
-House Council,Geetanjali Singj,Senior Yellow House Captain,"Stewardship, Resilience, Empathy","Leadership is my strongest quality, as I can inspire others, take initiative, and lead by example while ensuring everyone feels valued and heard.","I contribute initiative and collaboration, turning ideas into action while bringing enthusiasm, organisation, and unity to the team."
-Council,Prakhar Dixit,Student Welfare Secretary,"Determined, Patient, Good Listener","My strongest quality is determination. Once I set a goal for myself, I remain focused and committed to achieving it. I believe in staying consistent, overcoming challenges, and giving my best until I accomplish what I have set out to do.",I contribute by connecting students’ ideas with the right people and helping take those ideas from discussion to action.
-Council,TEGAN KAUR SABHARWAL,Head Girl,"Responsible, approachable, and proactive.","Approachability, because I believe a leader should always be someone people can come to.","Bringing people together, listening to ideas, and turning them into action."
-Council,Jayant Bodade,Head Boy,"1) Responsibility – I take the responsibilities entrusted to me seriously and always try to give my best to fulfil them.  2) Creativity & Initiative – I enjoy bringing new ideas to life and taking the initiative to make events and activities more meaningful. 3) Adaptability & Willingness to Learn – I believe in learning from my experiences, accepting my shortcomings, and continuously improving myself.","My strongest quality is Ownership. Once I take responsibility for something, I genuinely consider it my duty to give it my best. I don’t like doing things just for the sake of completing them; I try to improve them, learn from them, and leave a positive impact. I believe this quality has shaped me throughout my journey at Sanmati.","I contribute the ability to turn ideas into action. I enjoy thinking beyond the usual and finding creative, practical ways to make things happen. Whether it is planning an event, solving a problem, coordinating with people, or improving an existing idea, I take ownership and work towards making it meaningful for everyone. I believe my biggest contribution to the council is not just having ideas, but having the willingness to stand behind them and execute them."
-House Council,Ishaan saha,Green House Sports Captain,"Disciplined, encouraging, and unbiased.","Being unbiased is my strongest quality because I believe a captain should treat everyone fairly, listen to every team member, and make decisions based on what is right for the team rather than personal preferences.",I can bring greater participation in sports by encouraging students to step out of their comfort zones and discover their strengths. I would also help identify and encourage hidden talents so that more students get the opportunity to represent and contribute to the school.
-Council,Mitesh Bholanda,School council secretary,"Confident , critical thikner, Accountable,","Leadership is my strongest quality because I can inspire, guide, and bring people together to achieve a common goal.",Managerial skills
-Council,Ashim Prajapat,Cultural secretary,"Creative , confident , enthusiastic","Creativity is my strongest quality because I am a fun-loving and energetic person who enjoys thinking differently. I love coming up with new ideas, having fun while working, and making sure that whatever task I take up, I get it done.","One thing I contribute particularly well to the council is energy and enthusiasm. I’m a fun-loving person who enjoys keeping the team motivated and bringing a positive atmosphere. At the same time, when there’s work to be done, I make sure I get it done and encourage others to do their part too."
-Council,Devansh Pathak,Vice Head Boy,"Leadership, Persistence , Creativity","My strongest quality is leadership because I naturally take initiative, coordinate others, and take responsibility rather than waiting for someone else to lead. I believe a good leader should listen to others, make decisions when needed, and lead by example.","I contribute particularly well in taking initiative and turning ideas into action. I can coordinate with others, take responsibility for tasks, and help ensure that council activities are organized and carried out effectively."
-House Council,Aditya Singh,Junior House Vice Captain,"Leadership , Responsible , Confident",Leadership and confident because I can lead the thing which I am doing wisely and can do it confidently.,I will help in organising school events and maintaining discipline. I will do my best for our school.
-Council,Aaradhya Dubey,Deputy Cultural Secretary,"Initiative , creative , organised","I would say sincerity is one of my strongest qualities. Whatever responsibility I take, I give it my genuine effort and try to complete it with full commitment.",I will  communicate clearly with others and make sure we work together towards our common goals and make well informed decisions
-House Council,Ishaan Chapawat,Vice captain,"Confident ,can manage things and situation,critical thinking",Critical thinking is one of  my strongest quality as  I try to find solution when things and situation go wrong by observing and without being impatient.,"I will try my best and always come up with ideas which are good ,creative and beneficial for the school."
-House Council,Arham jain,Junior yellow house captain,"Responsible, good planning, leadership",Good planning is my best quality because I can understand any situation and make good plans and it works everytime in any situation,I contribute good planning and strong leadership and encourage everyone work together as a team
-Council,Dipesh Tomar,Sports captain,"Focused, Responsible, Team-oriented","Team-oriented— I have experience as a district-level captain, school Volleyball Captain, and Yellow House Captain. These experiences have taught me how to lead, communicate with different players, and take responsibility for the team.","I contribute teamwork, responsibility, and good communication to the council. As Sports Captain, I want to understand students’ ideas, work with the team, and turn those ideas into meaningful activities."
-House Council,Sarthak jain,Vice captain,My best quality are that l want to hard work first and then l have confidence and leadership,My strongest quality is confidence,I have clear and effective communication that bridges gap between member and community
-House Council,Mohammad rehan shaikh,Junior sports captain (RED HOUSE),1.Responsible – I take care of my duties and team members.  2.Confident – I make decisions confidently and motivate my team.  3.Organised – I manage sports activities and events properly.,"being responsible is most important because you have to lead your team, follow rules, and support everyone.","I contribute good teamwork and leadership skills to the council. I motivate others, take responsibility, and help everyone work together"
-House Council,Avanti Khandelwal,Junior Blue House Sports Captain,Curious Polite Inquisitive,"Inquisitive is the strongest.
-Curiosity is just wanting to know, but being inquisitive means actually asking questions to learn and grow.","I help the council by taking confusing ideas and turning them into clear, simple plans that everyone can follow."
-Council,Nishika Khetwani,Deputy welfare secretary,"Responsible, commited, sincere.",Dedicated towards my duties and I stay calm under pressure and make practical decisions that benefit everyone involved.,"I may not be the best in communication but I'm truly responsible, committed and support my team whenever."
-House Council,Asad,Joiner green house captain,"Confidence , leadership and organised","Leadership is my best quality love to lead with pride but it doesn't mean to rule over them instead i want to work with them with my full potential, responsibility, integrity and foster a strong sense of unity","The one thing that i will contribute particularly well to the council is my accountability and responsibility....
+// Google Sheet CSV via the Visualization API (gviz/tq), which reliably sends
+// CORS headers for cross-origin fetches, unlike the plain "publish to web" link.
+const CSV_URL = "https://docs.google.com/spreadsheets/d/171X-LHSXZ13NR7EorG4HgQx-BAZFkldHfBFogtjHykY/gviz/tq?tqx=out:csv&gid=91688536";
 
-Thank you ..."
-House Council,Chirayu Dhoot,Junior vice captain blue house,"Responsible ,respectful ,not using absuing language and discipline .",Responsible and respectful,I will always help my house to win in different competitions and every single student should try to keep us best out of 4 houses.
-House Council,Devanshi Chandel,Senior Yellow House Sports Captain,"Responsible,Determined,Understanding",I am Determined and I stay focused and keep trying until I achieve what I want,I can contribute my determination and responsibility by taking my work seriously and giving my best.
-`;
+// Auto-refresh interval (ms). 1 hour by default, matching how often the sheet updates.
+const REFRESH_MS = 60 * 60 * 1000;
 
 let data = [];
 let filter = "all";
+
 const search = document.getElementById("search");
 const grid = document.getElementById("grid");
+const statusEl = document.getElementById("status");
 
 function initials(name){
   return name.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase();
@@ -124,6 +96,7 @@ function esc(s){
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[c]));
 }
+
 function render(){
   const q = search.value.toLowerCase().trim();
   const items = data.filter(x =>
@@ -169,29 +142,58 @@ document.querySelectorAll(".filter").forEach(btn=>{
     render();
   });
 });
-search.addEventListener("input",render);
+search.addEventListener("input", render);
 
-const results = Papa.parse(CSV_TEXT, {
-  header: true,
-  skipEmptyLines: true
-});
-
-if (results.errors && results.errors.length) {
-  console.warn("CSV parse warnings:", results.errors);
+// The published sheet is the raw form-response export: it has two sets of
+// answer columns side by side (one filled in when "Enter your Name" is a text
+// field, the other when "Select your Name" is a dropdown). Each response row
+// only ever fills in one branch, so we merge them into a single flat record
+// by column position:
+//   0 Timestamp | 1 Council | 2 Name(A) | 3 Position(A) | 4 Qualities(A)
+//   5 Strongest(A) | 6 Contribution(A) | 7 Name(B) | 8 Position(B)
+//   9 Qualities(B) | 10 Strongest(B) | 11 Contribution(B)
+function mergeRow(cols){
+  const g = (i) => (cols[i] || "").trim();
+  return {
+    council: g(1),
+    name: g(2) || g(7),
+    position: g(3) || g(8),
+    qualities: g(4) || g(9),
+    strongest: g(5) || g(10),
+    contribution: g(6) || g(11)
+  };
 }
 
-data = results.data
-  .map(row => ({
-    council: (row.council || "").trim(),
-    name: (row.name || "").trim(),
-    position: (row.position || "").trim(),
-    qualities: (row.qualities || "").trim(),
-    strongest: (row.strongest || "").trim(),
-    contribution: (row.contribution || "").trim()
-  }))
-  .filter(row => row.name);
+function setStatus(msg){
+  statusEl.textContent = msg;
+}
 
-render();
+function loadData(){
+  const bustCacheUrl = CSV_URL + (CSV_URL.includes("?") ? "&" : "?") + "cachebust=" + Date.now();
+
+  Papa.parse(bustCacheUrl, {
+    download: true,
+    skipEmptyLines: true,
+    complete: function(results){
+      const rows = results.data; // array of arrays, row 0 is the header
+      const body = rows.slice(1);
+      data = body.map(mergeRow).filter(r => r.name);
+      render();
+      const now = new Date();
+      setStatus("Updated " + now.toLocaleTimeString());
+    },
+    error: function(err){
+      console.error("CSV load error:", err);
+      setStatus("Couldn't refresh — showing last loaded data");
+      if (!data.length){
+        grid.innerHTML = `<div class="error">Could not load the latest data. Check your internet connection or that the Google Sheet is still published.</div>`;
+      }
+    }
+  });
+}
+
+loadData();
+setInterval(loadData, REFRESH_MS);
 </script>
 </body>
 </html>
