@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanmati H.S. School — Council Introductions</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#fff; --ink:#15171a; --muted:#69717d;
+  --line:#e5e7eb; --accent:#111827; --soft:#f0f2f5;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.header{background:#101216;color:white;padding:54px 6vw 42px}
+.header-inner{max-width:1200px;margin:auto}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#aeb5c0;font-weight:700}
+h1{font-size:clamp(32px,5vw,62px);line-height:.98;margin:12px 0 14px;letter-spacing:-.04em}
+.subtitle{max-width:680px;color:#c7cbd1;font-size:16px;line-height:1.6;margin:0}
+.main{max-width:1200px;margin:auto;padding:28px 6vw 60px}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+button,.search{font:inherit}
+button{border:1px solid var(--line);background:white;border-radius:999px;padding:10px 16px;cursor:pointer;color:#3c434d}
+button.active{background:#111216;color:white;border-color:#111216}
+.search{flex:1;min-width:220px;border:1px solid var(--line);background:white;border-radius:999px;padding:12px 18px;outline:none}
+.search:focus{border-color:#9ca3af;box-shadow:0 0 0 3px #e5e7eb}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px}
+.stat{background:white;border:1px solid var(--line);border-radius:14px;padding:13px 17px}
+.stat b{font-size:20px;margin-right:5px}.stat span{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:25px;display:flex;flex-direction:column;min-height:390px;box-shadow:0 5px 20px rgba(16,24,40,.035)}
+.top{display:flex;gap:15px;align-items:center;margin-bottom:20px}
+.avatar{width:56px;height:56px;border-radius:16px;background:#111216;color:white;display:grid;place-items:center;font-weight:800;font-size:20px;flex:none}
+.name{font-size:21px;font-weight:800;letter-spacing:-.02em}
+.position{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.35}
+.badge{display:inline-block;margin-top:7px;background:var(--soft);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;color:#555d68}
+.section{border-top:1px solid var(--line);padding-top:16px;margin-top:14px}
+.label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#8a919b;margin-bottom:7px}
+.text{font-size:14px;line-height:1.6;color:#343a43}
+.footer{max-width:1200px;margin:0 auto;padding:0 6vw 35px;color:#8a919b;font-size:12px;text-align:center}
+.empty{text-align:center;color:var(--muted);padding:60px 10px;grid-column:1/-1}
+@media(max-width:600px){.header{padding:40px 5vw}.main{padding:22px 5vw 45px}.card{min-height:0}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <div class="eyebrow">Sanmati H.S. School</div>
+    <h1>Council Introductions</h1>
+    <p class="subtitle">Meet the student leaders, their strengths, and what they bring to the Student Council.</p>
+  </div>
+</header>
+
+<main class="main">
+  <div class="toolbar">
+    <button class="filter active" data-filter="all">All</button>
+    <button class="filter" data-filter="Council">Main Council</button>
+    <button class="filter" data-filter="House Council">House Council</button>
+    <input id="search" class="search" placeholder="Search by name or position…">
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="total">0</b><span>Introductions</span></div>
+    <div class="stat"><b id="mainCount">0</b><span>Main Council</span></div>
+    <div class="stat"><b id="houseCount">0</b><span>House Council</span></div>
+  </div>
+
+  <section id="grid" class="grid"></section>
+</main>
+<div class="footer">Council Badge Introduction • Sanmati H.S. School</div>
+
+<script>
+const data = [{"council": "House Council", "name": "Ansh Sharma", "position": "Sports captain blue house", "qualities": "Responsible, confident and organised", "strongest": "Confidence", "contribution": "Leadership also for seniors if I get the amounted respect."}, {"council": "Council", "name": "Pari Jaiswal", "position": "Social outreach secretary", "qualities": "1. People reader 2. Approachability 3. Initiator", "strongest": "I'm people oriented because I naturally connect with people...understand different perspectives and make others feel comfortable and included.", "contribution": "I contribute the ability to connect people and turn their ideas into meaningful participation."}, {"council": "House Council", "name": "Siddhika Bhushan Mulye", "position": "Green House Vice- Captain", "qualities": "Consistent, responsible, and observant", "strongest": "Consistency is my strongest quality because I believe real leadership is built through steady effort. I try to stay committed to my responsibilities, keep improving, and give my best even when the task is small or goes unnoticed.", "contribution": "I aim to build an environment where every voice is heard without bias and every student gets the opportunity to be recognised for their strengths. I will actively encourage students to discover and bring forward their talents, while carrying every responsibility entrusted to me by the Student Council, teachers, or management with consistency, sincerity, and accountability."}, {"council": "House Council", "name": "Bhumika Devda", "position": "Senior Red House Captain", "qualities": "Confident determined and supportive", "strongest": "Leadership - I’m confident in taking responsibility, speaking up for myself and others, and motivating people to work together", "contribution": "I will bring Teamwork confidence and courage to take initiative"}, {"council": "House Council", "name": "Unnati Chimnani", "position": "Red house vice captain", "qualities": "Confident, Approachable &Adaptable", "strongest": "My willingness to learn. I'm always open to learning something new, trying different things and gaining from ever experience. I believe there is always something remarkable inthe other person that needs to be learned by me!", "contribution": "Enthusiasm & participation. I bring energy and encourage others to involved,speak and make most of the opportunity they get"}, {"council": "House Council", "name": "Rabjot Kaur Bhatia", "position": "Green House Captain", "qualities": "Responsible, Inclusive and Motivating", "strongest": "My strongest quality is empathy, as I genuinely try to understand people and their feelings. This helps me listen to them, make them feel valued and included, and understand them better.", "contribution": "I can contribute my speaking skills to the school council, especially when it comes to expressing ideas and representing the council in school activities."}, {"council": "House Council", "name": "Tanvi Birchha — Blue House Vice Captain", "position": "Blue House Vice Captain", "qualities": "Empathetic listener,Fair minded & continuous learner", "strongest": "I believe one of my strongest qualities is being a continuous learner. I am always open to learning from my mistakes and respecting others’ opinions, because every experience gives me a chance to improve and grow. I believe a true leader should never stop learning, as personal growth also helps the whole team grow. For me, leadership is about learning together, improving together, and always trying to become better.", "contribution": "I would like to contribute better communication and participation to the council by bringing students’ ideas forward and encouraging them to take part in activities. I want to use my confidence and listening skills to help the council understand students better and turn good ideas into action."}, {"council": "Council", "name": "Khwaish Arija", "position": "Deputy student editor", "qualities": "Creativity, responsible , teamwork", "strongest": "Teamwork  Because a Student Editor isn’t just someone who writes or has ideas—they have to bring people together, communicate well, take initiative, and turn ideas into action.", "contribution": "I would bring fresh ideas and creativity while making sure every student’s voice is heard."}, {"council": "House Council", "name": "Divyanshi Upadhyay", "position": "Senior House Captain (Blue house)", "qualities": "Creative, Intuitive, Confident Public Speaker", "strongest": "My strongest quality is being a confident public speaker because it gives my ideas a real voice. It helps me express my thoughts clearly, connect with any audience instantly, and stay calm under pressure.", "contribution": "My main contribution is taking fresh, creative ideas and using my intuition to shape them into something real."}, {"council": "Council", "name": "Suhani Chourey", "position": "Student Editor", "qualities": "Perceptive, Articulate, and Resourceful", "strongest": "I believe my strongest quality is being 'perceptive' because I pay attention to the little things and try to understand situations from different perspectives. It helps me notice what people need and turn those observations into meaningful ideas.", "contribution": "I contribute particularly well by bringing people and ideas together. I like taking an idea, understanding what it needs, and turning it into something that people can connect with. I also believe in taking initiative and making sure that the work we do as a council is not just completed, but genuinely leaves an impact."}, {"council": "Council", "name": "Anshika Bhawel", "position": "Vice Head Girl", "qualities": "Responsible, Determined, and Confident.", "strongest": "I think being responsible is my strongest quality. Whenever I am given a responsibility, I try my best to complete it properly and make sure I can be depended on. I also take my role seriously and like to make sure things are done on time.", "contribution": "I think I contribute well when it comes to communicating with people and understanding different perspectives. I am comfortable talking to both students and teachers, and I try to make sure that everyone’s point of view is heard."}, {"council": "House Council", "name": "Mishika maheshwari", "position": "Red house Sports captain", "qualities": "Hard working ,responsible, holistic agility", "strongest": "My greatest strength is my holistic agility. I have this natural ability to switch between intense mental focus, physical energy, and creative teamwork without losing momentum. Whether a challenge is academic, competitive, or organizational, I actually enjoy the pressure. It helps me balance completely different responsibilities and turn them into real achievements.", "contribution": "The biggest thing I bring to the council is my ability to balance everything and connect with everyone. Since I do well in studies, sports, and functions, I can easily understand and talk to all kinds of students. I am always ready to do the hard work behind the scenes and keep the team's energy high when things get stressful. Basically, I am someone the council can always depend on to get the work done smoothly."}, {"council": "House Council", "name": "Geetanjali Singj", "position": "Senior Yellow House Captain", "qualities": "Stewardship, Resilience, Empathy", "strongest": "Leadership is my strongest quality, as I can inspire others, take initiative, and lead by example while ensuring everyone feels valued and heard.", "contribution": "I contribute initiative and collaboration, turning ideas into action while bringing enthusiasm, organisation, and unity to the team."}, {"council": "Council", "name": "Prakhar Dixit", "position": "Student Welfare Secretary", "qualities": "Determined, Patient, Good Listener", "strongest": "My strongest quality is determination. Once I set a goal for myself, I remain focused and committed to achieving it. I believe in staying consistent, overcoming challenges, and giving my best until I accomplish what I have set out to do.", "contribution": "I contribute by connecting students’ ideas with the right people and helping take those ideas from discussion to action."}, {"council": "Council", "name": "TEGAN KAUR SABHARWAL", "position": "Head Girl", "qualities": "Responsible, approachable, and proactive.", "strongest": "Approachability, because I believe a leader should always be someone people can come to.", "contribution": "Bringing people together, listening to ideas, and turning them into action."}, {"council": "Council", "name": "Jayant Bodade", "position": "Head Boy", "qualities": "1) Responsibility – I take the responsibilities entrusted to me seriously and always try to give my best to fulfil them.  2) Creativity & Initiative – I enjoy bringing new ideas to life and taking the initiative to make events and activities more meaningful. 3) Adaptability & Willingness to Learn – I believe in learning from my experiences, accepting my shortcomings, and continuously improving myself.", "strongest": "My strongest quality is Ownership. Once I take responsibility for something, I genuinely consider it my duty to give it my best. I don’t like doing things just for the sake of completing them; I try to improve them, learn from them, and leave a positive impact. I believe this quality has shaped me throughout my journey at Sanmati.", "contribution": "I contribute the ability to turn ideas into action. I enjoy thinking beyond the usual and finding creative, practical ways to make things happen. Whether it is planning an event, solving a problem, coordinating with people, or improving an existing idea, I take ownership and work towards making it meaningful for everyone. I believe my biggest contribution to the council is not just having ideas, but having the willingness to stand behind them and execute them."}, {"council": "House Council", "name": "Ishaan saha", "position": "Green House Sports Captain", "qualities": "Disciplined, encouraging, and unbiased.", "strongest": "Being unbiased is my strongest quality because I believe a captain should treat everyone fairly, listen to every team member, and make decisions based on what is right for the team rather than personal preferences.", "contribution": "I can bring greater participation in sports by encouraging students to step out of their comfort zones and discover their strengths. I would also help identify and encourage hidden talents so that more students get the opportunity to represent and contribute to the school."}, {"council": "Council", "name": "Mitesh Bholanda", "position": "School council secretary", "qualities": "Confident , critical thikner, Accountable,", "strongest": "Leadership is my strongest quality because I can inspire, guide, and bring people together to achieve a common goal.", "contribution": "Managerial skills"}];
+let filter = "all";
+const search = document.getElementById("search");
+
+function initials(name){
+  return name.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase();
+}
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function render(){
+  const q = search.value.toLowerCase().trim();
+  const items = data.filter(x =>
+    (filter === "all" || x.council === filter) &&
+    (!q || (x.name+" "+x.position+" "+x.qualities+" "+x.strongest).toLowerCase().includes(q))
+  );
+
+  document.getElementById("grid").innerHTML = items.length ? items.map(x => `
+    <article class="card">
+      <div class="top">
+        <div class="avatar">${esc(initials(x.name))}</div>
+        <div>
+          <div class="name">${esc(x.name)}</div>
+          <div class="position">${esc(x.position)}</div>
+          <div class="badge">${esc(x.council === "Council" ? "Main Council" : x.council || "Council")}</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="label">Three best qualities</div>
+        <div class="text">${esc(x.qualities) || "—"}</div>
+      </div>
+      <div class="section">
+        <div class="label">Strongest quality & why</div>
+        <div class="text">${esc(x.strongest) || "—"}</div>
+      </div>
+      <div class="section">
+        <div class="label">What I contribute</div>
+        <div class="text">${esc(x.contribution) || "—"}</div>
+      </div>
+    </article>
+  `).join("") : `<div class="empty">No introductions match your search.</div>`;
+
+  document.getElementById("total").textContent = data.length;
+  document.getElementById("mainCount").textContent = data.filter(x=>x.council==="Council").length;
+  document.getElementById("houseCount").textContent = data.filter(x=>x.council==="House Council").length;
+}
+document.querySelectorAll(".filter").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    filter = btn.dataset.filter;
+    render();
+  });
+});
+search.addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
